@@ -3,6 +3,7 @@ module TestLoop.Internal.Watcher (reloadTestSuite) where
 --------------------
 
 import           Control.Monad.Trans                 (MonadIO (..))
+import           Data.List                           (isPrefixOf)
 import           Data.Monoid                         (mconcat)
 import qualified Filesystem.Path                     as FS
 import qualified Filesystem.Path.CurrentOS           as FS
@@ -20,10 +21,31 @@ import           Data.Time.LocalTime                 (getZonedTime)
 
 --------------------
 
+import           System.Directory                    (doesDirectoryExist,
+                                                      getCurrentDirectory,
+                                                      getDirectoryContents)
+import           System.FilePath                     (joinPath)
+
+--------------------
+
 import           TestLoop.Internal.Types
 import           TestLoop.Util
 
 --------------------------------------------------------------------------------
+
+getPackageDatabaseFile :: IO (Maybe FilePath)
+getPackageDatabaseFile = do
+  cabalDevExists <- doesDirectoryExist "cabal-dev"
+  if (not cabalDevExists)
+     then return Nothing
+     else do
+       dir <- getCurrentDirectory
+       let cabalDevDir = joinPath [dir, "cabal-dev"]
+       packages <- getDirectoryContents cabalDevDir
+       case filter ("packages-" `isPrefixOf`) packages of
+         (packagesFile:_) -> return $ Just (joinPath [cabalDevDir, packagesFile])
+         _ -> return Nothing
+
 
 reloadTestSuite :: MainModuleName
                 -> MainModulePath
@@ -48,10 +70,13 @@ reloadTestSuite moduleName modulePath sourcePaths modifiedFile
         Right () -> return ()
         Left e   -> print e
 
-    runInterpreter = unsafeRunInterpreterWithArgs
-                       [ "-i " ++ join ":" sourcePaths
-                       , "-package-conf cabal-dev/packages-7.6.1.conf"]
-                       interpreterAction
+    runInterpreter = do
+      mPackageDatabaseFile <- getPackageDatabaseFile
+      let args = case mPackageDatabaseFile of
+                   Just file -> [ "-i " ++ join ":" sourcePaths
+                                , "-package-conf " ++ file]
+                   Nothing -> [ "-i " ++ join ":" sourcePaths]
+      unsafeRunInterpreterWithArgs args interpreterAction
 
     interpreterAction = do
       loadModules [modulePath]
