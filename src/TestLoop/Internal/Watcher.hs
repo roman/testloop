@@ -3,14 +3,16 @@ module TestLoop.Internal.Watcher (reloadTestSuite) where
 --------------------
 
 import           Control.Monad.Trans                 (MonadIO (..))
-import           Data.List                           (isPrefixOf)
+import           Data.List                           (intercalate, isPrefixOf,
+                                                      nub)
 import           Data.Monoid                         (mconcat)
 import qualified Filesystem.Path                     as FS
 import qualified Filesystem.Path.CurrentOS           as FS
 
 --------------------
 
-import           Language.Haskell.Interpreter        (as, interpret,
+import           Language.Haskell.Interpreter        (InterpreterError (..), as,
+                                                      errMsg, interpret,
                                                       loadModules, setImportsQ,
                                                       setTopLevelModules)
 import           Language.Haskell.Interpreter.Unsafe (unsafeRunInterpreterWithArgs)
@@ -28,6 +30,7 @@ import           System.FilePath                     (joinPath)
 
 --------------------
 
+import           TestLoop.Internal.Signal
 import           TestLoop.Internal.Types
 import           TestLoop.Util
 
@@ -53,22 +56,35 @@ reloadTestSuite :: MainModuleName
                 -> FS.FilePath
                 -> IO ()
 reloadTestSuite moduleName modulePath sourcePaths modifiedFile
-  | isNotEmacsFile = reloadTestSuite_
+  | isNotEmacsFile = do
+    reloadTestSuite_
   | otherwise = return ()
   where
     isNotEmacsFile = not ('#' `elem` (FS.encodeString $ FS.filename modifiedFile))
     reloadTestSuite_ = do
-      -- time <- getZonedTime
-      -- putStrLn ""
-      -- putStrLn $ replicate 80 '-'
-      -- putStrLn $ mconcat [ show time
-      --                    , " | "
-      --                    , FS.encodeString  modifiedFile]
-      -- putStrLn $ replicate 80 '-'
-      r <- runInterpreter
-      case r of
-        Right () -> return ()
-        Left e   -> print e
+      printTimeHeader
+      result <- protectHandlers runInterpreter
+      case result of
+        Left err -> putStrLn "" >> putStrLn (format err)
+        Right _ -> return ()
+
+    printTimeHeader = do
+      time <- getZonedTime
+      putStrLn ""
+      putStrLn $ replicate 80 '-'
+      putStr "-- "
+      putStr (show time)
+      putStr " "
+      let remaindingWidth = 76 - (length (show time))
+      putStrLn $ replicate remaindingWidth '-'
+
+    -- shamelessly stolen from snap-loader-dynamic
+    format :: InterpreterError -> String
+    format (UnknownError e)   = "Unknown interpreter error:\r\n\r\n" ++ e
+    format (NotAllowed e)     = "Interpreter action not allowed:\r\n\r\n" ++ e
+    format (GhcException e)   = "GHC error:\r\n\r\n" ++ e
+    format (WontCompile errs) = concat ["Compile errors:\r\n\r\n",
+                                        intercalate "\r\n" $ nub $ map errMsg errs]
 
     runInterpreter = do
       mPackageDatabaseFile <- getPackageDatabaseFile

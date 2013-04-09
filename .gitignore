@@ -2,3 +2,6 @@
 \#*
 dist/
 cabal-dev/
+*_flymake*
+examples/testloop-example/cabal-dev/*
+examples/testloop-example/dist/*
