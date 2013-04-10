@@ -12,8 +12,10 @@ import qualified Filesystem.Path.CurrentOS           as FS
 --------------------
 
 import           Language.Haskell.Interpreter        (InterpreterError (..), as,
-                                                      errMsg, interpret,
-                                                      loadModules, setImportsQ,
+                                                      errMsg,
+                                                      interpret,
+                                                      loadModules, 
+                                                      setImportsQ,
                                                       setTopLevelModules)
 import           Language.Haskell.Interpreter.Unsafe (unsafeRunInterpreterWithArgs)
 
