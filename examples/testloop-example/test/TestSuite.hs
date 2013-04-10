@@ -14,7 +14,7 @@ specs = describe "App" $ do
     foo `shouldBe` "foo"
   it "inc should always increment" $ do
     -- TODO: Fix this error
-    --                            
+    --
     -- execute ./startTestLoop on the root of the testloop-example
     -- project and then fix this code
-    inc 1 `shouldBe` 1
+    inc 1 `shouldBe` 2
