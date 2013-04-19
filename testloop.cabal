@@ -13,7 +13,7 @@ name:                testloop
 version:             0.1.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            Quick feedback loop on test suites
+synopsis:            Quick feedback loop for test suites
 
 -- A longer description of the package.
 description:
@@ -68,9 +68,9 @@ library
     base            == 4.6.*,
     Cabal           == 1.16.*,
     directory       == 1.2.*,
-    filepath        == 1.3.0.1,
+    filepath        == 1.3.*,
     fsnotify        == 0.0.6,
-    hint            == 0.3.3.6,
+    hint            == 0.3.*,
     mtl             == 2.1.*,
     system-filepath == 0.4.*,
     time            == 1.4.*

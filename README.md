@@ -1,13 +1,14 @@
 # TestLoop
 
 TestLoop is a library that provides an automated execution and
-reloading of a cabal's test-suites whenever a file is modified on the
-hs-source-dirs
+reloading of a cabal's test-suites whenever a haskell file is
+modified.
+
 
 ## Usage
 
-Once you have a test suite using a haskell test library (hspec, HUnit,
-test-framework, etc), write the following in your project's cabal file:
+Once you have a test suite using a haskell test library ([hspec][hspec], [HUnit][hunit],
+[test-framework][testframe], etc), write the following in your project's cabal file:
 
 ```cabal
 test-suite tests
@@ -29,12 +30,20 @@ executable testloop
 And in the `test/TestLoop.hs` file:
 
 ```haskell
+module Main where
+
 import TestLoop.Main (setupTestLoop)
 
 main :: IO ()
 main = setupTestLoop
 ```
 
-Install and run your testloop, as soon as you edit your source files
-it will automatically compile and run your tests, instant feedback
-FTW.
+Install and run your TestLoop, as soon as you start editing your
+source files it will automatically compile and run your tests, instant
+feedback FTW.
+
+Note: Currently TestLoop expects you to have your tests in a `test` folder
+
+[hspec]: http://hspec.github.io/
+[hunit]: http://hunit.sourceforge.net/HUnit-1.0/Guide.html
+[testframe]: http://batterseapower.github.io/test-framework
