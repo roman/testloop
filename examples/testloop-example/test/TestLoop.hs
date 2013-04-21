@@ -1,6 +1,6 @@
 module Main where
-    
-import TestLoop.Main (setupTestLoop)
+
+import           System.TestLoop (setupTestLoop)
 
 main :: IO ()
 main = setupTestLoop

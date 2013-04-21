@@ -1,4 +1,4 @@
-module TestLoop.Internal.Watcher (reloadTestSuite) where
+module System.TestLoop.Internal.Watcher (reloadTestSuite) where
 
 --------------------
 
@@ -12,10 +12,8 @@ import qualified Filesystem.Path.CurrentOS           as FS
 --------------------
 
 import           Language.Haskell.Interpreter        (InterpreterError (..), as,
-                                                      errMsg,
-                                                      interpret,
-                                                      loadModules, 
-                                                      setImportsQ,
+                                                      errMsg, interpret,
+                                                      loadModules, setImportsQ,
                                                       setTopLevelModules)
 import           Language.Haskell.Interpreter.Unsafe (unsafeRunInterpreterWithArgs)
 
@@ -32,9 +30,9 @@ import           System.FilePath                     (joinPath)
 
 --------------------
 
-import           TestLoop.Internal.Signal
-import           TestLoop.Internal.Types
-import           TestLoop.Util
+import           System.TestLoop.Internal.Signal
+import           System.TestLoop.Internal.Types
+import           System.TestLoop.Util
 
 --------------------------------------------------------------------------------
 

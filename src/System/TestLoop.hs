@@ -7,30 +7,33 @@
 -- Maintainer: romanandreg@gmail.com
 -- Portability: unix
 --
-module TestLoop.Main (setupTestLoop) where
+module System.TestLoop (
+  -- * Main function
+  setupTestLoop
+  ) where
 
 --------------------
 
-import           Control.Concurrent        (forkIO, threadDelay)
-import           Control.Monad             (forM_, forever)
-import           Data.Monoid               (mconcat)
-import           System.FilePath           (joinPath)
-import           System.IO                 (hPutStrLn, stderr)
+import           Control.Concurrent               (forkIO, threadDelay)
+import           Control.Monad                    (forM_, forever)
+import           Data.Monoid                      (mconcat)
+import           System.FilePath                  (joinPath)
+import           System.IO                        (hPutStrLn, stderr)
 
 --------------------
 
-import qualified Filesystem.Path.CurrentOS as FS
+import qualified Filesystem.Path.CurrentOS        as FS
 
 --------------------
 
-import           System.FSNotify           (withManager)
-import           System.FSNotify.Devel     (treeExtExists)
+import           System.FSNotify                  (withManager)
+import           System.FSNotify.Devel            (treeExtExists)
 --------------------
 
-import           TestLoop.Internal.Cabal
-import           TestLoop.Internal.Types
-import           TestLoop.Internal.Watcher
-import           TestLoop.Util
+import           System.TestLoop.Internal.Cabal
+import           System.TestLoop.Internal.Types
+import           System.TestLoop.Internal.Watcher
+import           System.TestLoop.Util
 
 --------------------------------------------------------------------------------
 
@@ -51,7 +54,6 @@ startTestLoop moduleName modulePath paths =
 -- Parses your project's cabal file to figure out a test-suite
 -- executable, then it will wait for modifications on files contained
 -- in the test-suite's hs-source-dirs setting.
-
 setupTestLoop :: IO ()
 setupTestLoop = do
  (testsuite, moduleFile, sourcePaths) <- parseCabalFile

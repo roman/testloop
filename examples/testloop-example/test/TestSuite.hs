@@ -17,4 +17,4 @@ specs = describe "App" $ do
     --
     -- execute ./startTestLoop on the root of the testloop-example
     -- project and then fix this code
-    inc 1 `shouldBe` 2
+    inc 1 `shouldBe` 0

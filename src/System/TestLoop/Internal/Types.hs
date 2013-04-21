@@ -1,4 +1,4 @@
-module TestLoop.Internal.Types where
+module System.TestLoop.Internal.Types where
 
 type TestSuiteName = String
 type MainModulePath = String

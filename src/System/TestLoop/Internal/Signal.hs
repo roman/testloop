@@ -1,6 +1,6 @@
 {-# LANGUAGE CPP #-}
 -- Shamelessly stolen from snap-loader-dynamic
-module TestLoop.Internal.Signal (protectHandlers) where
+module System.TestLoop.Internal.Signal (protectHandlers) where
 
 ------------------------------------------------------------------------------
 import Control.Exception (bracket)

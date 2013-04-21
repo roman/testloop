@@ -1,4 +1,4 @@
-module TestLoop.Internal.Cabal (parseCabalFile) where
+module System.TestLoop.Internal.Cabal (parseCabalFile) where
 
 --------------------
 
@@ -14,7 +14,6 @@ import           System.FilePath                       (joinPath, takeDirectory)
 --------------------
 
 import           Distribution.PackageDescription       (CondTree (..), GenericPackageDescription (..),
-                                                        PackageDescription (..),
                                                         TestSuite (..),
                                                         TestSuiteInterface (..),
                                                         condTreeData,
@@ -25,7 +24,7 @@ import           Distribution.Verbosity                (normal)
 
 --------------------
 
-import           TestLoop.Internal.Types
+import           System.TestLoop.Internal.Types
 
 --------------------------------------------------------------------------------
 

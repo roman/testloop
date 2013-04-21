@@ -1,4 +1,4 @@
-module TestLoop.Util where
+module System.TestLoop.Util where
 
 --------------------
 

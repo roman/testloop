@@ -52,15 +52,15 @@ library
   -- Modules exported by the library.
   hs-source-dirs: src
   exposed-modules:
-    TestLoop.Main
+    System.TestLoop
 
   -- Modules included in this library but not exported.
   other-modules:
-    TestLoop.Util,
-    TestLoop.Internal.Cabal,
-    TestLoop.Internal.Types,
-    TestLoop.Internal.Signal,
-    TestLoop.Internal.Watcher
+    System.TestLoop.Util,
+    System.TestLoop.Internal.Cabal,
+    System.TestLoop.Internal.Types,
+    System.TestLoop.Internal.Signal,
+    System.TestLoop.Internal.Watcher
 
 
   -- Other library packages from which modules are imported.

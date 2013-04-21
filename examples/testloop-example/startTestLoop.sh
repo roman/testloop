@@ -1,7 +1,8 @@
 #!/bin/bash
 
-_runTestLoop {
+function _runTestLoop {
     cabal-dev add-source ../../../testloop
+    cabal-dev install testloop --reinstall
     cabal-dev clean
     cabal-dev configure --enable-tests
     cabal-dev build
@@ -11,4 +12,4 @@ _runTestLoop {
     ./dist/build/testloop/testloop
 }
 
-command -v cabal-dev || _runTestLoop
+command -v cabal-dev && _runTestLoop
