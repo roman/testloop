@@ -17,9 +17,11 @@ synopsis:            Quick feedback loop for test suites
 
 -- A longer description of the package.
 description:
-  TestLoop is a library that provides an automated
-  execution and reloading of a cabal's test-suites whenever
-  a file is modified on the hs-source-dirs
+  TestLoop provides an automated execution and code reloading of
+  your project's test-suites whenever a haskell source file is
+  modified.
+
+  To get started check out http://github.com/roman/testloop
 
 -- URL for the project homepage or repository.
 homepage:            http://github.com/roman/testloop

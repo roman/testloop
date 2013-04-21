@@ -49,11 +49,21 @@ startTestLoop moduleName modulePath paths =
 
 --------------------------------------------------------------------------------
 
--- | Use this function as the main of you testloop executable.
+-- | Parses your project's cabal file to find possible test-suites you
+--   may have on your project, then it will start a file modification
+--   tracking and once a file is changed it will run the testsuite
+--   automatically.  in the test-suite's hs-source-dirs setting.
 --
--- Parses your project's cabal file to figure out a test-suite
--- executable, then it will wait for modifications on files contained
--- in the test-suite's hs-source-dirs setting.
+-- Use this function as the main of you testloop executable.
+-- e.g
+--
+-- > module Main where
+-- >
+-- > import System.TestLoop
+-- >
+-- > main :: IO ()
+-- > main = setupTestLoop
+--
 setupTestLoop :: IO ()
 setupTestLoop = do
  (testsuite, moduleFile, sourcePaths) <- parseCabalFile

@@ -4,6 +4,7 @@ TestLoop is a library that provides an automated execution and
 reloading of a cabal's test-suites whenever a haskell file is
 modified.
 
+NOTE: To get started quickly check the project in the examples folder.
 
 ## Usage
 
