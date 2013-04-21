@@ -42,6 +42,7 @@ maintainer:          romanandreg@gmail.com
 -- A copyright notice.
 -- copyright:
 
+
 category:            Testing, Development
 
 build-type:          Simple
@@ -80,3 +81,8 @@ library
   if !os(windows)
     build-depends:
       unix >= 2.2.0.0 && < 2.7
+
+
+source-repository head
+  type:     git
+  location: https://github.com/roman/testloop
