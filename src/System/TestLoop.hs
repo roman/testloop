@@ -16,7 +16,9 @@ module System.TestLoop (
 
 import           Control.Concurrent               (forkIO, threadDelay)
 import           Control.Monad                    (forM_, forever)
+import           Data.Maybe                       (catMaybes)
 import           Data.Monoid                      (mconcat)
+import           System.Directory                 (doesFileExist)
 import           System.FilePath                  (joinPath)
 import           System.IO                        (hPutStrLn, stderr)
 
@@ -49,6 +51,29 @@ startTestLoop moduleName modulePath paths =
 
 --------------------------------------------------------------------------------
 
+getTestMainFilePath :: HsSourcePaths -> MainModulePath -> IO (Either String FilePath)
+getTestMainFilePath sourcePaths modulePath = do
+    mainPaths <- mapM getPossiblePath sourcePaths
+    case (catMaybes mainPaths) of
+      [completeModulePath] -> return $ Right completeModulePath
+      [] -> return . Left $ mconcat [ "Could not find `",
+                                      modulePath,
+                                      "' in ",
+                                      show sourcePaths]
+      multipleMatches -> return . Left $ mconcat [ "Multiple matches for test `Main' module"
+                                                , "on source-paths: \n",
+                                                show mainPaths ]
+
+  where
+    getPossiblePath sourcePath = do
+      let completeModulePath = joinPath [sourcePath, modulePath]
+      fileExists <- doesFileExist completeModulePath
+      if fileExists
+        then return $ Just completeModulePath
+        else return Nothing
+
+--------------------------------------------------------------------------------
+
 -- | Parses your project's cabal file to find possible test-suites you
 --   may have on your project, then it will start a file modification
 --   tracking and once a file is changed it will run the testsuite
@@ -67,13 +92,13 @@ startTestLoop moduleName modulePath paths =
 setupTestLoop :: IO ()
 setupTestLoop = do
  (testsuite, moduleFile, sourcePaths) <- parseCabalFile
- if not ("test" `elem` sourcePaths)
-    then hPutStrLn stderr (mconcat [ "You must have a `test` folder in "
-                                   , "your cabal's test-suite hs-source-paths"])
-    else do
-      putStrLn $ "Test Loop starting on test-suite '" ++ testsuite ++ "'"
-      putStrLn $ "Listening files on source paths: " ++ (join ", " sourcePaths)
-      _ <- forkIO $ startTestLoop "Main"
-                                  (joinPath ["test", moduleFile])
-                                  sourcePaths
-      forever $ threadDelay 100
+ result <- getTestMainFilePath sourcePaths moduleFile
+ case result of
+   Left e -> hPutStrLn stderr e
+   Right fullModuleFilePath -> do
+     putStrLn $ "Found test-suite main function on `" ++ fullModuleFilePath ++ "'"
+     putStrLn $ "Listening files on source paths: " ++ (join ", " sourcePaths)
+     _ <- forkIO $ startTestLoop "Main"
+                                 fullModuleFilePath
+                                 sourcePaths
+     forever $ threadDelay 100

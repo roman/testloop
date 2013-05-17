@@ -72,7 +72,7 @@ library
     Cabal           == 1.16.*,
     directory       == 1.2.*,
     filepath        == 1.3.*,
-    fsnotify        == 0.0.6,
+    fsnotify        >= 0.0.8,
     hint            == 0.3.*,
     mtl             == 2.1.*,
     system-filepath == 0.4.*,
