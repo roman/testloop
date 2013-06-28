@@ -3,7 +3,7 @@ module System.TestLoop.Internal.Cabal (parseCabalFile) where
 --------------------
 
 import           Control.Applicative                   ((<$>), (<*>))
-import           Data.List                             (isInfixOf)
+import           Data.List                             (isSuffixOf)
 import           Data.Monoid                           (First (..), mconcat)
 import           System.Directory                      (getCurrentDirectory,
                                                         getDirectoryContents,
@@ -13,7 +13,8 @@ import           System.FilePath                       (joinPath, takeDirectory)
 
 --------------------
 
-import           Distribution.PackageDescription       (CondTree (..), GenericPackageDescription (..),
+import           Distribution.PackageDescription       (CondTree (..),
+                                                        GenericPackageDescription (..),
                                                         TestSuite (..),
                                                         TestSuiteInterface (..),
                                                         condTreeData,
@@ -41,7 +42,8 @@ parseTestSuiteInfo :: Maybe String
 parseTestSuiteInfo (Just inputName) (name, CondNode { condTreeData=testSuite })
     | inputName == name =
       case testInterface testSuite of
-        TestSuiteExeV10 _ file -> Just (name, file, hsSourceDirs $ testBuildInfo testSuite)
+        TestSuiteExeV10 _ file ->
+            Just (name, file, hsSourceDirs $ testBuildInfo testSuite)
         _ -> Nothing
     | otherwise = Nothing
 parseTestSuiteInfo Nothing input@(name, _) = parseTestSuiteInfo (Just name) input
@@ -55,7 +57,7 @@ getCabalFilePathFrom originalPath =
         then return Nothing
         else do
           contents <- getDirectoryContents currentPath
-          case dropWhile (not . (".cabal" `isInfixOf`)) contents of
+          case dropWhile (not . (".cabal" `isSuffixOf`)) contents of
             [] -> loop (takeDirectory currentPath) finalPath
             (result:_) -> return $ Just (joinPath [currentPath, result])
 
