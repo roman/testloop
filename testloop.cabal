@@ -21,7 +21,7 @@ description:
   your project's test-suites whenever a haskell source file is
   modified.
 
-  To get started check out http://github.com/roman/testloop
+  To get started check out <http://github.com/roman/testloop>
 
 -- URL for the project homepage or repository.
 homepage:            http://github.com/roman/testloop
