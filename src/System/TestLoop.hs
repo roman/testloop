@@ -75,12 +75,33 @@ getTestMainFilePath sourcePaths modulePath = do
 --------------------------------------------------------------------------------
 
 -- | Parses your project's cabal file to find possible test-suites you
---   may have on your project, then it will start a file modification
---   tracking and once a file is changed it will run the testsuite
---   automatically.  in the test-suite's hs-source-dirs setting.
+--   may have on your project, then it will start a tracking process
+--   that listens to changes on files specified on the hs-source-dirs
+--   parameter of your testsuite, once a file is changed this process will
+--   run the testsuite automatically.
 --
 -- Use this function as the main of you testloop executable.
 -- e.g
+--
+-- On Cabal File
+--
+-- > test-suite lib-tests
+-- >   type: exitcode-stdio-1.0
+-- >   main-is: TestSuite.hs
+-- >   hs-source-dirs:
+-- >     src, test
+-- >   build-depends:
+-- >     -- test dependencies
+-- >
+-- > executable testloop
+-- >   main-is: TestLoop.hs
+-- >   hs-source-dirs:
+-- >     src, test
+-- >   build-depends:
+-- >     -- Your lib/app and test dependencies ... + testloop
+-- >     testloop
+--
+-- On test/TestLoop.hs
 --
 -- > module Main where
 -- >
