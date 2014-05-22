@@ -67,17 +67,28 @@ getPackageDatabaseFile =
            , getCabalDevPackageDatabaseFile ]
 
 
+-- TODO: Should have a Settings type being passed as a
+-- parameter, this value will have files that should be
+-- ignored.
 reloadTestSuite :: MainModuleName
                 -> MainModulePath
                 -> HsSourcePaths
                 -> FS.FilePath
                 -> IO ()
 reloadTestSuite moduleName modulePath sourcePaths modifiedFile
-  | isNotEmacsFile = do
-    reloadTestSuite_
+  | isValidFile = reloadTestSuite_
   | otherwise = return ()
   where
-    isNotEmacsFile = not ('#' `elem` (FS.encodeString $ FS.filename modifiedFile))
+    modifiedFileString = FS.encodeString $ FS.filename modifiedFile
+    isNotEmacsFile     = not $ or ['#' `elem` modifiedFileString
+                                  , "flycheck_" `isPrefixOf` modifiedFileString ]
+    isNotVimFile       = not $ "~" `isSuffixOf` modifiedFileString
+    isNotHiddenFile    = not $ "." `isPrefixOf` modifiedFileString
+    -- TODO: Use future Settings type to accomplish this
+    isValidFile        = and [ isNotEmacsFile
+                             , isNotVimFile
+                             , isNotHiddenFile ]
+
     reloadTestSuite_ = do
       printTimeHeader
       result <- protectHandlers runInterpreter
@@ -87,12 +98,13 @@ reloadTestSuite moduleName modulePath sourcePaths modifiedFile
 
     printTimeHeader = do
       time <- getZonedTime
+      let msg = "Modified: " ++ modifiedFileString ++ " at " ++ show time
       putStrLn ""
       putStrLn $ replicate 80 '-'
       putStr "-- "
-      putStr (show time)
+      putStr msg
       putStr " "
-      let remaindingWidth = 76 - (length (show time))
+      let remaindingWidth = 76 - (length msg)
       putStrLn $ replicate remaindingWidth '-'
 
     -- shamelessly stolen from snap-loader-dynamic
