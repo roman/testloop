@@ -2,30 +2,27 @@ module System.TestLoop.Internal.Cabal (parseCabalFile) where
 
 --------------------
 
-import           Control.Applicative                   ((<$>), (<*>))
-import           Data.List                             (isSuffixOf)
-import           Data.Monoid                           (First (..), mconcat)
-import           System.Directory                      (getCurrentDirectory,
-                                                        getDirectoryContents,
-                                                        getHomeDirectory)
-import           System.Environment                    (getArgs)
-import           System.FilePath                       (joinPath, takeDirectory)
+import Control.Applicative ((<$>), (<*>))
+import Data.List (isSuffixOf)
+import Data.Monoid (First (..), mconcat)
+import System.Directory (getCurrentDirectory, getDirectoryContents,
+                         getHomeDirectory)
+import System.Environment (getArgs)
+import System.FilePath (joinPath, takeDirectory)
 
 --------------------
 
-import           Distribution.PackageDescription       (CondTree (..),
-                                                        GenericPackageDescription (..),
-                                                        TestSuite (..),
-                                                        TestSuiteInterface (..),
-                                                        condTreeData,
-                                                        hsSourceDirs,
-                                                        testBuildInfo)
-import           Distribution.PackageDescription.Parse (readPackageDescription)
-import           Distribution.Verbosity                (normal)
+import Distribution.PackageDescription (CondTree (..),
+                                        GenericPackageDescription (..),
+                                        TestSuite (..), TestSuiteInterface (..),
+                                        condTreeData, hsSourceDirs,
+                                        testBuildInfo)
+import Distribution.PackageDescription.Parse (readPackageDescription)
+import Distribution.Verbosity (normal)
 
 --------------------
 
-import           System.TestLoop.Internal.Types
+import System.TestLoop.Internal.Types
 
 --------------------------------------------------------------------------------
 
@@ -52,7 +49,7 @@ getCabalFilePathFrom :: FilePath -> IO (Maybe FilePath)
 getCabalFilePathFrom originalPath =
     getHomeDirectory >>= loop originalPath
   where
-    loop currentPath finalPath = do
+    loop currentPath finalPath =
       if currentPath == finalPath
         then return Nothing
         else do
@@ -63,8 +60,8 @@ getCabalFilePathFrom originalPath =
 
 
 getCabalFilePath :: IO (Maybe FilePath)
-getCabalFilePath = do
-    getCurrentDirectory >>= getCabalFilePathFrom
+getCabalFilePath =
+  getCurrentDirectory >>= getCabalFilePathFrom
 
 parseCabalFile_ :: Maybe String
                 -> GenericPackageDescription

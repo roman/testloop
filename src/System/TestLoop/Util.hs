@@ -2,7 +2,7 @@ module System.TestLoop.Util where
 
 --------------------
 
-import           Data.List (intersperse)
+import Data.List (intersperse)
 
 --------------------------------------------------------------------------------
 
