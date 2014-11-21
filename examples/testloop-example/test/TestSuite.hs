@@ -1,9 +1,9 @@
 module Main where
 
-import           Test.Hspec
-import           Test.Hspec.Runner (defaultConfig, hspecWith)
+import Test.Hspec
+import Test.Hspec.Runner (defaultConfig, hspecWith)
 
-import           App
+import App
 
 main :: IO ()
 main = hspecWith defaultConfig specs >> return ()
@@ -17,4 +17,4 @@ specs = describe "App" $ do
     --
     -- execute ./startTestLoop on the root of the testloop-example
     -- project and then fix this code
-    inc 1 `shouldBe` 0
+    inc 1 `shouldBe` 2

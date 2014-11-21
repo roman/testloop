@@ -49,6 +49,7 @@ test-suite test
   type: exitcode-stdio-1.0
   main-is: TestSuite.hs
   hs-source-dirs: src, test
+  ghc-options: -Wall
   build-depends:
     base >=4.5,
     hspec
@@ -62,6 +63,7 @@ executable testloop
   -- other-modules:
 
   -- Other library packages from which modules are imported.
+  ghc-options: -Wall
   build-depends:
     base >=4.5,
     testloop == 0.1.*,
@@ -72,5 +74,6 @@ library
   exposed-modules:
     App
 
+  ghc-options: -Wall
   build-depends:
     base >=4.5

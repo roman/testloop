@@ -4,4 +4,4 @@ foo :: String
 foo = "foo"
 
 inc :: Int -> Int
-inc = (+1)
+inc = (+0)
