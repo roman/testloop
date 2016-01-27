@@ -1,9 +1,5 @@
 \.\#*
 \#*
-dist/
-cabal-dev/
-.cabal-sandbox/
-cabal.sandbox.config
 *_flymake*
-examples/testloop-example/cabal-dev/*
-examples/testloop-example/dist/*
+
+.stack-work/
