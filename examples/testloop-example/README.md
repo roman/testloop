@@ -2,6 +2,6 @@
 
 Requirements:
 
-* cabal-dev
+* [Stack](http://haskellstack.org/)
 
-execute ./startTestLoop.sh in your shell and read instructions.
+Execute `./startTestLoop.sh` in your shell and read instructions.
